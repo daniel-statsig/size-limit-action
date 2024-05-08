@@ -45,8 +45,8 @@ class SizeLimit {
   }
 
   private formatChange(base: number = 0, current: number = 0): string {
-    const minus = color("limegreen", "-");
-    const plus = color("orangered", "+");
+    const minus = color("limegreen", "⬇️");
+    const plus = color("orangered", "⬆️");
 
     if (base === 0) {
       return `${plus}100%`;

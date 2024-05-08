@@ -30733,8 +30733,8 @@ class SizeLimit {
         return `${Math.ceil(seconds * 1000)} ms`;
     }
     formatChange(base = 0, current = 0) {
-        const minus = color("limegreen", "-");
-        const plus = color("orangered", "+");
+        const minus = color("limegreen", "⬇️");
+        const plus = color("orangered", "⬆️");
         if (base === 0) {
             return `${plus}100%`;
         }
