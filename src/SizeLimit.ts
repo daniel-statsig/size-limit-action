@@ -17,12 +17,12 @@ const EmptyResult = {
   total: 0
 };
 
-function color(color: "red" | "green", input: string): string {
-  return " ${color{" + color + "}" + input + "}$ ";
+function color(color: "orangered" | "limegreen", input: string): string {
+  return " ${\\color{" + color + "}" + input + "}$ ";
 }
 
 class SizeLimit {
-  static SIZE_RESULTS_HEADER = ["Path", "Size"];
+  static SIZE_RESULTS_HEADER = ["Path", "Size", "Loading"];
 
   static TIME_RESULTS_HEADER = [
     "Path",
@@ -45,8 +45,8 @@ class SizeLimit {
   }
 
   private formatChange(base: number = 0, current: number = 0): string {
-    const minus = color("green", "-");
-    const plus = color("green", "-");
+    const minus = color("limegreen", "-");
+    const plus = color("orangered", "+");
 
     if (base === 0) {
       return `${plus}100%`;
@@ -80,7 +80,14 @@ class SizeLimit {
     const now = this.formatBytes(current.size);
     const change = this.formatChange(base.size, current.size);
 
-    return [name, `\`${was}\` -> \`${now}\` (${change})`];
+    return [
+      name,
+      `\`${was}\` -> \`${now}\` (${change})`,
+      this.formatLine(
+        this.formatTime(current.loading),
+        this.formatChange(base.loading, current.loading)
+      )
+    ];
   }
 
   private formatTimeResult(
@@ -131,6 +138,7 @@ class SizeLimit {
           [result.name]: {
             name: result.name,
             size: +result.size,
+            loading: +result.loading,
             ...time
           }
         };

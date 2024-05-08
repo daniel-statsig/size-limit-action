@@ -30720,7 +30720,7 @@ const EmptyResult = {
     total: 0
 };
 function color(color, input) {
-    return " ${color{" + color + "}" + input + "}$ ";
+    return " ${\\color{" + color + "}" + input + "}$ ";
 }
 class SizeLimit {
     formatBytes(size) {
@@ -30733,8 +30733,8 @@ class SizeLimit {
         return `${Math.ceil(seconds * 1000)} ms`;
     }
     formatChange(base = 0, current = 0) {
-        const minus = color("green", "-");
-        const plus = color("green", "-");
+        const minus = color("limegreen", "-");
+        const plus = color("orangered", "+");
         if (base === 0) {
             return `${plus}100%`;
         }
@@ -30755,7 +30755,11 @@ class SizeLimit {
         const was = this.formatBytes(base.size);
         const now = this.formatBytes(current.size);
         const change = this.formatChange(base.size, current.size);
-        return [name, `\`${was}\` -> \`${now}\` (${change})`];
+        return [
+            name,
+            `\`${was}\` -> \`${now}\` (${change})`,
+            this.formatLine(this.formatTime(current.loading), this.formatChange(base.loading, current.loading))
+        ];
     }
     formatTimeResult(name, base, current) {
         return [
@@ -30781,7 +30785,7 @@ class SizeLimit {
                     total: loading + running
                 };
             }
-            return Object.assign(Object.assign({}, current), { [result.name]: Object.assign({ name: result.name, size: +result.size }, time) });
+            return Object.assign(Object.assign({}, current), { [result.name]: Object.assign({ name: result.name, size: +result.size, loading: +result.loading }, time) });
         }, {});
     }
     formatResults(base, current) {
@@ -30801,7 +30805,7 @@ class SizeLimit {
         return [header, ...fields];
     }
 }
-SizeLimit.SIZE_RESULTS_HEADER = ["Path", "Size"];
+SizeLimit.SIZE_RESULTS_HEADER = ["Path", "Size", "Loading"];
 SizeLimit.TIME_RESULTS_HEADER = [
     "Path",
     "Size",
