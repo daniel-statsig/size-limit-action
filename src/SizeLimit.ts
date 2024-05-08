@@ -102,8 +102,8 @@ class SizeLimit {
   }
 
   parseResults(output: string): { [name: string]: IResult } {
-    const begin = output.indexOf('{');
-    const end = output.lastIndexOf('}');
+    const begin = output.indexOf("[");
+    const end = output.lastIndexOf("]");
     const results = JSON.parse(output.slice(begin, end + 1));
 
     return results.reduce(
