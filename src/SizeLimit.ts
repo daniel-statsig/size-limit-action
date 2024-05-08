@@ -1,7 +1,7 @@
 // @ts-ignore
 import bytes from "bytes";
 
-interface IResult {
+export interface IResult {
   name: string;
   size: number;
   running?: number;
@@ -16,6 +16,10 @@ const EmptyResult = {
   loading: 0,
   total: 0
 };
+
+function color(color: "red" | "green", input: string): string {
+  return " ${color{" + color + "}" + input + "}$ ";
+}
 
 class SizeLimit {
   static SIZE_RESULTS_HEADER = ["Path", "Size"];
@@ -41,8 +45,11 @@ class SizeLimit {
   }
 
   private formatChange(base: number = 0, current: number = 0): string {
+    const minus = color("green", "-");
+    const plus = color("green", "-");
+
     if (base === 0) {
-      return "+100% 🔺";
+      return `${plus}100%`;
     }
 
     const value = ((current - base) / base) * 100;
@@ -50,14 +57,14 @@ class SizeLimit {
       (Math.sign(value) * Math.ceil(Math.abs(value) * 100)) / 100;
 
     if (value > 0) {
-      return `+${formatted}% 🔺`;
+      return `${plus}${formatted}%`;
     }
 
     if (value === 0) {
       return `${formatted}%`;
     }
 
-    return `${formatted}% 🔽`;
+    return `${minus}${formatted}%`;
   }
 
   private formatLine(value: string, change: string) {
@@ -69,13 +76,11 @@ class SizeLimit {
     base: IResult,
     current: IResult
   ): Array<string> {
-    return [
-      name,
-      this.formatLine(
-        this.formatBytes(current.size),
-        this.formatChange(base.size, current.size)
-      )
-    ];
+    const was = this.formatBytes(base.size);
+    const now = this.formatBytes(current.size);
+    const change = this.formatChange(base.size, current.size);
+
+    return [name, `\`${was}\` -> \`${now}\` (${change})`];
   }
 
   private formatTimeResult(
@@ -101,7 +106,7 @@ class SizeLimit {
     ];
   }
 
-  parseResults(output: string): { [name: string]: IResult } {
+  parseResults(output: string): Record<string, IResult> {
     const begin = output.indexOf("[");
     const end = output.lastIndexOf("]");
     const results = JSON.parse(output.slice(begin, end + 1));

@@ -30719,6 +30719,9 @@ const EmptyResult = {
     loading: 0,
     total: 0
 };
+function color(color, input) {
+    return " ${color{" + color + "}" + input + "}$ ";
+}
 class SizeLimit {
     formatBytes(size) {
         return bytes_1.default.format(size, { unitSeparator: " " });
@@ -30730,27 +30733,29 @@ class SizeLimit {
         return `${Math.ceil(seconds * 1000)} ms`;
     }
     formatChange(base = 0, current = 0) {
+        const minus = color("green", "-");
+        const plus = color("green", "-");
         if (base === 0) {
-            return "+100% 🔺";
+            return `${plus}100%`;
         }
         const value = ((current - base) / base) * 100;
         const formatted = (Math.sign(value) * Math.ceil(Math.abs(value) * 100)) / 100;
         if (value > 0) {
-            return `+${formatted}% 🔺`;
+            return `${plus}${formatted}%`;
         }
         if (value === 0) {
             return `${formatted}%`;
         }
-        return `${formatted}% 🔽`;
+        return `${minus}${formatted}%`;
     }
     formatLine(value, change) {
         return `${value} (${change})`;
     }
     formatSizeResult(name, base, current) {
-        return [
-            name,
-            this.formatLine(this.formatBytes(current.size), this.formatChange(base.size, current.size))
-        ];
+        const was = this.formatBytes(base.size);
+        const now = this.formatBytes(current.size);
+        const change = this.formatChange(base.size, current.size);
+        return [name, `\`${was}\` -> \`${now}\` (${change})`];
     }
     formatTimeResult(name, base, current) {
         return [
@@ -30924,7 +30929,7 @@ const github_1 = __nccwpck_require__(5438);
 const markdown_table_1 = __importDefault(__nccwpck_require__(1062));
 const Term_1 = __importDefault(__nccwpck_require__(2993));
 const SizeLimit_1 = __importDefault(__nccwpck_require__(9250));
-const SIZE_LIMIT_HEADING = `## size-limit report 📦 `;
+const SIZE_LIMIT_HEADING = `## 📦 Bundle Size Report `;
 function fetchPreviousComment(octokit, repo, pr) {
     return __awaiter(this, void 0, void 0, function* () {
         // TODO: replace with octokit.issues.listComments when upgraded to v17

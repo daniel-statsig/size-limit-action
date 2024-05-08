@@ -3,9 +3,9 @@ import { context, GitHub } from "@actions/github";
 // @ts-ignore
 import table from "markdown-table";
 import Term from "./Term";
-import SizeLimit from "./SizeLimit";
+import SizeLimit, { IResult } from "./SizeLimit";
 
-const SIZE_LIMIT_HEADING = `## size-limit report 📦 `;
+const SIZE_LIMIT_HEADING = `## 📦 Bundle Size Report `;
 
 async function fetchPreviousComment(
   octokit: GitHub,
@@ -73,8 +73,8 @@ async function run() {
       packageManager
     );
 
-    let base;
-    let current;
+    let base: Record<string, IResult>;
+    let current: Record<string, IResult>;
 
     try {
       base = limit.parseResults(baseOutput);
