@@ -30805,7 +30805,7 @@ class SizeLimit {
         return [header, ...fields];
     }
 }
-SizeLimit.SIZE_RESULTS_HEADER = ["Path", "Size", "Loading"];
+SizeLimit.SIZE_RESULTS_HEADER = ["Bundle", "Gzip Size", "3G Load Time"];
 SizeLimit.TIME_RESULTS_HEADER = [
     "Path",
     "Size",

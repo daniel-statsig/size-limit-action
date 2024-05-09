@@ -22,7 +22,7 @@ function color(color: "orangered" | "limegreen", input: string): string {
 }
 
 class SizeLimit {
-  static SIZE_RESULTS_HEADER = ["Path", "Size", "Loading"];
+  static SIZE_RESULTS_HEADER = ["Bundle", "Gzip Size", "3G Load Time"];
 
   static TIME_RESULTS_HEADER = [
     "Path",
